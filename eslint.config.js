@@ -19,5 +19,9 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      // 允许使用 any 类型，不在 ESLint 中报错
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
   },
 ])
