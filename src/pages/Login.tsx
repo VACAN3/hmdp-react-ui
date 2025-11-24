@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Card, Form, Input, Typography, Space, Checkbox, message, Select, Image, Row, Col } from 'antd'
+import { useEffect, useState } from 'react'
+import { Form, Input, message, Select, Image, Row, Col } from 'antd'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { setToken, setAuthInfo } from '@/utils/auth'
 import { login, getCodeImg, getTenantList } from '@/api/login'
 import { getInfo } from '@/api/system/user'
 import type { TenantVO } from '@/api/types'
+import './Login.css'
+import bg2 from '@/assets/login/bg2.jpg'
+import { EyeOutlined, EyeInvisibleOutlined, UserOutlined } from '@ant-design/icons'
 
 type LoginFormValues = {
   username: string
@@ -26,6 +29,8 @@ export default function Login() {
   const [codeUrl, setCodeUrl] = useState<string>('')
   const [tenantList, setTenantList] = useState<TenantVO[]>([])
   const [loading, setLoading] = useState<boolean>(false)
+  const [isUser, setIsUser] = useState<boolean>(true)
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false)
 
   const fetchCode = async () => {
     try {
@@ -120,69 +125,136 @@ export default function Login() {
       navigate(to, { replace: true })
       setLoading(false)
     } catch (e: any) {
+      console.log("🚀 ~ onFinish ~ e:", e)
       setLoading(false)
       // 登录失败时刷新验证码
       fetchCode()
     }
   }
 
+  const toggleRemember = () => {
+    const current = form.getFieldValue('rememberMe')
+    form.setFieldsValue({ rememberMe: !current })
+  }
+
+  const changeType = () => {
+    setIsUser(v => !v)
+  }
+
   return (
-    <div style={{ minHeight: '100vh', background: '#f0f2f5', position: 'relative' }}>
-      {/* 简单装饰效果 */}
-      <div style={{ position: 'absolute', width: '100%', height: '100%', pointerEvents: 'none', overflow: 'hidden' }}>
-        {[...Array(15)].map((_, i) => (
-          <div key={i} style={{ position: 'absolute', top: -70, left: `${Math.random() * 100}%`, width: 160, height: 70, background: 'linear-gradient(to bottom, #4a90e2 0%, #357abd 100%)', border: '1px solid #2d6da3', borderRadius: 5, boxShadow: '0 2px 4px rgba(0,0,0,0.2)', opacity: 0.2 }} />
-        ))}
+    <div className="login-container">
+      <div className="login-bg">
+        <img src={bg2} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
       </div>
-
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-        <Card title="登录" style={{ width: 420 }}>
-          <Form form={form} layout="vertical" onFinish={onFinish} initialValues={{ rememberMe: true }}>
-            {tenantEnabled ? (
-              <Form.Item name="tenantId" label="租户" rules={[{ required: true, message: '请选择租户' }]}> 
-                <Select placeholder="请选择/输入公司名称" showSearch filterOption={(input, option) => (option?.label as string)?.toLowerCase().includes(input.toLowerCase())} options={tenantList.map(t => ({ label: t.companyName, value: t.tenantId }))} />
-              </Form.Item>
-            ) : (
-              <Form.Item name="tenantId" label="租户ID" tooltip="如系统启用多租户，请填写或选择租户" >
-                <Input placeholder="可选：租户ID" />
-              </Form.Item>
-            )}
-            <Form.Item name="username" label="用户名" rules={[{ required: true, message: '请输入用户名' }]}> 
-              <Input placeholder="用户名" autoComplete="username" />
-            </Form.Item>
-            <Form.Item name="password" label="密码" rules={[{ required: true, message: '请输入密码' }]}> 
-              <Input.Password placeholder="密码" autoComplete="current-password" />
-            </Form.Item>
-
-            {captchaEnabled && (
-              <>
-                <Form.Item name="uuid" hidden>
-                  <Input type="hidden" />
-                </Form.Item>
-                <Row gutter={8} align="middle">
-                  <Col flex="auto">
-                    <Form.Item name="code" label="验证码" rules={[{ required: true, message: '请输入验证码' }]}> 
-                      <Input placeholder="验证码" />
-                    </Form.Item>
-                  </Col>
-                  <Col>
-                    {codeUrl && (
-                      <Image src={codeUrl} alt="验证码" preview={false} height={40} onClick={fetchCode} style={{ cursor: 'pointer', marginTop: 28 }} />
+      <div className="login-right">
+        <div className="login-panel">
+          <div className="login-content-box">
+            <div className="login-title"></div>
+            <div className="login-form">
+              <div className="login-form-header">
+                <div className="login-form-header-left"></div>
+                <div className={`login-form-header-right ${!isUser ? 'active' : ''}`} onClick={changeType}>
+                  <div className="acount-icon">
+                    <UserOutlined style={{ fontSize: 18, color: isUser ? '#008bfb' : '#ffffff' }} />
+                  </div>
+                  <div className={isUser ? 'toggle-indicator' : 'activeScan'}></div>
+                  <div className="circle"></div>
+                </div>
+              </div>
+              <div className="login-form-content">
+                {isUser ? (
+                  <Form form={form} layout="vertical" onFinish={onFinish} initialValues={{ rememberMe: true }}>
+                    {tenantEnabled ? (
+                      <>
+                        <div className="user-name-box">
+                          <span className="user-name">租户</span>
+                        </div>
+                        <Form.Item name="tenantId" rules={[{ required: true, message: '请选择租户' }]}> 
+                          <Select placeholder="请选择/输入公司名称" showSearch filterOption={(input, option) => (option?.label as string)?.toLowerCase().includes(input.toLowerCase())} options={tenantList.map(t => ({ label: t.companyName, value: t.tenantId }))} />
+                        </Form.Item>
+                      </>
+                    ) : (
+                      <>
+                        <div className="user-name-box">
+                          <span className="user-name">租户ID</span>
+                        </div>
+                        <Form.Item name="tenantId"> 
+                          <Input placeholder="如启用多租户，请填写或选择租户" />
+                        </Form.Item>
+                      </>
                     )}
-                  </Col>
-                </Row>
-              </>
-            )}
 
-            <Form.Item name="rememberMe" valuePropName="checked">
-              <Checkbox>记住我</Checkbox>
-            </Form.Item>
-            <Space style={{ width: '100%', justifyContent: 'space-between' }}>
-              <Typography.Link href="#">忘记密码?</Typography.Link>
-              <Button type="primary" htmlType="submit" loading={loading}>登录</Button>
-            </Space>
-          </Form>
-        </Card>
+                    <div className="user-name-box">
+                      <span className="user-name">海麦工号</span>
+                    </div>
+                    <Form.Item name="username" rules={[{ required: true, message: '请输入账号' }]}> 
+                      <Input placeholder="请输入" autoComplete="username" prefix={<span className="user-icon" />} />
+                    </Form.Item>
+
+                    <div className="user-name-box">
+                      <span className="user-name">登录密码</span>
+                      <div className="rember-password" onClick={toggleRemember}>
+                        <div className={`rember-password-icon ${form.getFieldValue('rememberMe') ? 'is-selected' : ''}`}></div>
+                        <span style={{ color: '#8993a3' }}>记住密码</span>
+                      </div>
+                    </div>
+                    <Form.Item name="password" rules={[{ required: true, message: '请输入密码' }]}> 
+                      <Input
+                        type={passwordVisible ? 'text' : 'password'}
+                        placeholder="请输入"
+                        autoComplete="current-password"
+                        prefix={<span className="password-icon" />}
+                        suffix={
+                          passwordVisible ? (
+                            <EyeInvisibleOutlined className="password-toggle" onClick={() => setPasswordVisible(false)} />
+                          ) : (
+                            <EyeOutlined className="password-toggle" onClick={() => setPasswordVisible(true)} />
+                          )
+                        }
+                        onPressEnter={() => form.submit()}
+                      />
+                    </Form.Item>
+
+                    {captchaEnabled && (
+                      <>
+                        <Form.Item name="uuid" hidden>
+                          <Input type="hidden" />
+                        </Form.Item>
+                        <div className="login-code-box">
+                          <Row gutter={8} align="middle">
+                            <Col flex="auto">
+                              <Form.Item name="code" rules={[{ required: true, message: '请输入验证码' }]}> 
+                                <Input placeholder="验证码" prefix={<span className="code-icon" />} onPressEnter={() => form.submit()} />
+                              </Form.Item>
+                            </Col>
+                            <Col>
+                              {codeUrl && (
+                                <div className="login-code">
+                                  <Image src={codeUrl} alt="验证码" preview={false} height={40} onClick={fetchCode} className="login-code-img" />
+                                </div>
+                              )}
+                            </Col>
+                          </Row>
+                        </div>
+                      </>
+                    )}
+
+                    <div className={`login-btn ${loading ? 'loading' : ''}`} onClick={() => form.submit()}>
+                      <span>{loading ? '登录中...' : 'Sign\u00A0In'}</span>
+                    </div>
+                  </Form>
+                ) : (
+                  <div className="dd-code-box" style={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8993a3' }}>
+                    钉钉扫码登录（占位）
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="el-login-footer">
+            <span>Copyright © 2024 广州海麦 All Rights Reserved.</span>
+          </div>
+        </div>
       </div>
     </div>
   )

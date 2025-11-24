@@ -1,0 +1,286 @@
+/* 基于 hmdp-ui 登录页样式的 React 版本 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.login-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  position: relative;
+  overflow-y: auto;
+}
+
+.login-bg {
+  width: 60%;
+}
+
+.login-right {
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.login-panel {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+}
+
+.login-content-box {
+  width: 387px;
+  height: 550px;
+}
+
+.login-title {
+  width: 387px;
+  height: 120px;
+  background: url('../assets/login/login_title.png') no-repeat center center;
+}
+
+.login-form { 
+  margin-top: 61px;
+}
+
+.login-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.login-form-header-left {
+  background: url('../assets/login/logo.png') no-repeat center center;
+  width: 180px;
+  height: 40px;
+}
+
+.login-form-header-right {
+  width: 58px;
+  height: 30px;
+  border-radius: 20px;
+  background: #008bf8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 5px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.login-form-header-right .acount-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.login-form-header-right .toggle-indicator {
+  width: 21px;
+  height: 21px;
+  background: url('../assets/login/scan.png') no-repeat center center;
+  transition: transform 0.3s ease;
+}
+
+.login-form-header-right .activeScan {
+  width: 21px;
+  height: 21px;
+  background: url('../assets/login/scanActive.png') no-repeat center center;
+  transition: transform 0.3s ease;
+}
+
+.login-form-header-right .circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  position: absolute;
+  left: 3px;
+  z-index: 1;
+  transition: transform 0.3s ease-out;
+}
+
+.login-form-header-right.active .circle {
+  transform: translateX(27px);
+  transition: transform 0.15s ease-in;
+}
+
+.login-btn {
+  width: 100%;
+  text-align: center;
+  height: 48px;
+  border-radius: 8px;
+  color: #fff;
+  background: #bfc2c7;
+  line-height: 45px;
+  cursor: pointer;
+  margin-top: 20px;
+  font-family: PingFangSC-Medium;
+}
+
+.login-btn:hover {
+  background: #008bf8;
+  color: #0d0d0d;
+}
+
+.user-name-box {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.user-name-box .user-name {
+  font-family: PingFangSC-Medium;
+  color: #0d0d0d;
+  font-weight: bold;
+}
+
+.rember-password {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.rember-password-icon {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid #dcdfe6;
+  margin-right: 4px;
+}
+
+.rember-password-icon:hover {
+  border-color: #008bfb;
+}
+
+.rember-password-icon.is-selected {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #409eff;
+  border: 1px solid #409eff;
+  position: relative;
+}
+
+.rember-password-icon.is-selected::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+}
+
+.user-icon {
+  height: 18px;
+  width: 18px;
+  background: url('../assets/login/user.png') no-repeat center center;
+  display: inline-block;
+}
+
+.password-icon {
+  width: 16px;
+  height: 18px;
+  background: url('../assets/login/password.png') no-repeat center center;
+  display: inline-block;
+}
+
+.code-icon {
+  width: 18px;
+  height: 16px;
+  background: url('../assets/login/code.png') no-repeat center center;
+  display: inline-block;
+}
+
+/* 适配 Ant Design 组件的样式以贴近 Vue 版视觉 */
+.login-form .ant-input,
+.login-form .ant-input-affix-wrapper,
+.login-form .ant-select-selector {
+  height: 48px;
+  border-radius: 5px;
+}
+
+.login-form .ant-input-affix-wrapper,
+.login-form .ant-select-selector {
+  display: flex;
+  align-items: center;
+}
+
+.login-form .ant-input-affix-wrapper:hover,
+.login-form .ant-input-affix-wrapper-focused,
+.login-form .ant-select-focused .ant-select-selector,
+.login-form .ant-select-selector:hover {
+  box-shadow: 0 0 0 1px #008bfb !important;
+  border-color: #008bfb !important;
+}
+
+.login-form-content .ant-form-item {
+  margin-bottom: 16px;
+}
+
+.login-code-box .ant-form-item {
+  margin-bottom: 0;
+}
+
+.login-code-box .login-code { 
+  width: 27%;
+  height: 40px;
+}
+
+/* 验证码区域排版贴近 Vue 版本 */
+.login-code-box .ant-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.login-code-box .ant-col:first-child {
+  flex: 0 0 63%;
+}
+.login-code-box .ant-col:last-child {
+  flex: 0 0 27%;
+}
+
+.login-code-img {
+  cursor: pointer;
+  vertical-align: middle;
+  height: 40px;
+}
+
+.password-toggle {
+  cursor: pointer;
+}
+
+.el-login-footer {
+  height: 40px;
+  line-height: 40px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  color: #bfc2c7;
+  font-family: PingFangSC-Medium;
+  font-size: 12px;
+  letter-spacing: 1px;
+  z-index: 999;
+}
+
+@media screen and (max-width: 875px) {
+  .login-bg {
+    display: none;
+  }
+  .login-right {
+    width: 100% !important;
+    height: 100vh;
+  }
+}
