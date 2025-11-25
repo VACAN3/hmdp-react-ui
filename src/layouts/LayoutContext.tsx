@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 
 type Device = 'desktop' | 'mobile'
 type ComponentSize = 'small' | 'middle' | 'large'
+type Language = 'zh-CN' | 'en-US'
 
 type SidebarState = {
   opened: boolean
@@ -14,6 +15,7 @@ type SettingsState = {
   fixedHeader: boolean
   theme: string
   componentSize: ComponentSize
+  language: Language
 }
 
 type LayoutContextValue = {
@@ -27,6 +29,7 @@ type LayoutContextValue = {
   setFixedHeader: (fixed: boolean) => void
   setTagsView: (show: boolean) => void
   setComponentSize: (size: ComponentSize) => void
+  setLanguage: (lang: Language) => void
 }
 
 const LayoutContext = createContext<LayoutContextValue | null>(null)
@@ -44,7 +47,11 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     const s = localStorage.getItem('app.componentSize') as ComponentSize | null
     return s === 'small' || s === 'middle' || s === 'large' ? s : 'middle'
   })()
-  const [settings, setSettings] = useState<SettingsState>({ tagsView: true, fixedHeader: true, theme: '#409EFF', componentSize: initSize })
+  const initLang = (() => {
+    const l = localStorage.getItem('app.language') as Language | null
+    return l === 'zh-CN' || l === 'en-US' ? l : 'zh-CN'
+  })()
+  const [settings, setSettings] = useState<SettingsState>({ tagsView: true, fixedHeader: true, theme: '#409EFF', componentSize: initSize, language: initLang })
 
   useEffect(() => {
     const WIDTH = 992
@@ -64,6 +71,10 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('app.componentSize', settings.componentSize)
   }, [settings.componentSize] )
 
+  useEffect(() => {
+    localStorage.setItem('app.language', settings.language)
+  }, [settings.language])
+
   const value = useMemo<LayoutContextValue>(() => ({
     device,
     sidebar,
@@ -75,6 +86,7 @@ export function LayoutProvider({ children }: { children: React.ReactNode }) {
     setFixedHeader: (fixed) => setSettings(s => ({ ...s, fixedHeader: fixed })),
     setTagsView: (show) => setSettings(s => ({ ...s, tagsView: show })),
     setComponentSize: (size) => setSettings(s => ({ ...s, componentSize: size })),
+    setLanguage: (lang) => setSettings(s => ({ ...s, language: lang })),
   }), [device, sidebar, settings])
 
   return <LayoutContext.Provider value={value}>{children}</LayoutContext.Provider>

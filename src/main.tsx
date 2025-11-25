@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import { message } from 'antd'
+import './i18n'
 import 'antd/dist/reset.css'
 import './index.css'
 

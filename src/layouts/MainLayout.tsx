@@ -1,13 +1,17 @@
 import React from 'react'
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom'
 import { Menu, Dropdown, Avatar, Space, Modal, message, ConfigProvider } from 'antd'
+import zhCN from 'antd/locale/zh_CN'
+import enUS from 'antd/locale/en_US'
 import { UserOutlined, DownOutlined, SettingOutlined, LogoutOutlined, SwapOutlined, ProfileOutlined } from '@ant-design/icons'
 import SizeSelect from '@/components/SizeSelect'
+import LanguageSelect from '@/components/LanguageSelect'
 import { routes, buildMenuFromRoutes } from '@/router/routes'
 import { LayoutProvider, useLayout } from './LayoutContext'
 import { usePermission } from '@/hooks/usePermission'
 import { logout as apiLogout } from '@/api/login'
 import { removeToken } from '@/utils/auth'
+import { useTranslation } from 'react-i18next'
 import './layout.css'
 
 function Sidebar() {
@@ -38,6 +42,7 @@ function Sidebar() {
 
 function Navbar() {
   const { sidebar, openSideBar, closeSideBar, toggleSideBarHide, settings, setFixedHeader, setTagsView } = useLayout()
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { hasPermission } = usePermission()
   const toggleOpen = () => (sidebar.opened ? closeSideBar({ withoutAnimation: false }) : openSideBar({ withoutAnimation: false }))
@@ -75,22 +80,25 @@ function Navbar() {
   }
 
   const dropdownItems: NonNullable<React.ComponentProps<typeof Dropdown>['menu']>['items'] = [
-    { key: 'profile', label: '个人中心', icon: <ProfileOutlined /> },
-    { key: 'layout', label: '布局设置', icon: <SettingOutlined /> },
-    hasPermission('auth:user:change') ? { key: 'changeAccount', label: '切换账号', icon: <SwapOutlined /> } : null,
+    { key: 'profile', label: t('navbar.profile'), icon: <ProfileOutlined /> },
+    { key: 'layout', label: t('navbar.layoutSettings'), icon: <SettingOutlined /> },
+    hasPermission('auth:user:change') ? { key: 'changeAccount', label: t('navbar.changeAccount'), icon: <SwapOutlined /> } : null,
     { type: 'divider' as const },
-    { key: 'logout', label: '退出登录', icon: <LogoutOutlined /> },
+    { key: 'logout', label: t('navbar.logout'), icon: <LogoutOutlined /> },
   ].filter(Boolean) as any
   
   return (
     <div className="navbar">
-      <button className="nav-btn" onClick={toggleOpen} title="切换侧栏">☰</button>
+      <button className="nav-btn" onClick={toggleOpen} title={t('navbar.toggleSidebar')}>☰</button>
       <div className="nav-spacer" />
-      <button className="nav-btn" onClick={() => toggleSideBarHide()} title="隐藏侧栏">⤢</button>
-      <button className="nav-btn" onClick={() => setFixedHeader(!settings.fixedHeader)} title="固定头部">Hdr</button>
-      <button className="nav-btn" onClick={() => setTagsView(!settings.tagsView)} title="标签视图">Tags</button>
+      <button className="nav-btn" onClick={() => toggleSideBarHide()} title={t('navbar.hideSidebar')}>⤢</button>
+      <button className="nav-btn" onClick={() => setFixedHeader(!settings.fixedHeader)} title={t('navbar.fixedHeader')}>Hdr</button>
+      <button className="nav-btn" onClick={() => setTagsView(!settings.tagsView)} title={t('navbar.tagsView')}>Tags</button>
       <div style={{ marginLeft: 8 }}>
         <SizeSelect />
+      </div>
+      <div style={{ marginLeft: 8 }}>
+        <LanguageSelect />
       </div>
       <Dropdown menu={{ items: dropdownItems, onClick: onMenuClick }} trigger={["click"]}>
         <Space style={{ cursor: 'pointer', marginLeft: 8 }}>
@@ -103,11 +111,13 @@ function Navbar() {
 }
 
 function TagsView() {
-  return <div className="tags-view">TagsView 占位</div>
+  const { t } = useTranslation()
+  return <div className="tags-view">{t('tagsView.placeholder')}</div>
 }
 
 function Settings() {
-  return <div className="settings">Settings 占位</div>
+  const { t } = useTranslation()
+  return <div className="settings">{t('settings.placeholder')}</div>
 }
 
 function LayoutShell() {
@@ -119,7 +129,7 @@ function LayoutShell() {
     device === 'mobile' ? 'mobile' : '',
   ].join(' ')
   return (
-    <ConfigProvider componentSize={settings.componentSize}>
+    <ConfigProvider componentSize={settings.componentSize} locale={settings.language === 'zh-CN' ? zhCN : enUS}>
       <div className={classObj} style={{ ['--current-color' as any]: settings.theme }}>
         {device === 'mobile' && sidebar.opened && (
           <div className="drawer-bg" onClick={() => closeSideBar({ withoutAnimation: false })} />

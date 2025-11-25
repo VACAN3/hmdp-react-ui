@@ -1,0 +1,21 @@
+{
+  "navbar": {
+    "toggleSidebar": "Toggle Sidebar",
+    "hideSidebar": "Hide Sidebar",
+    "fixedHeader": "Fixed Header",
+    "tagsView": "Tags View",
+    "profile": "Profile",
+    "layoutSettings": "Layout Settings",
+    "changeAccount": "Switch Account",
+    "logout": "Logout",
+    "language": "Language",
+    "size": "Size"
+  },
+  "tagsView": {
+    "placeholder": "TagsView Placeholder"
+  },
+  "settings": {
+    "placeholder": "Settings Placeholder"
+  }
+}
+

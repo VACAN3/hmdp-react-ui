@@ -1,0 +1,21 @@
+{
+  "navbar": {
+    "toggleSidebar": "切换侧栏",
+    "hideSidebar": "隐藏侧栏",
+    "fixedHeader": "固定头部",
+    "tagsView": "标签视图",
+    "profile": "个人中心",
+    "layoutSettings": "布局设置",
+    "changeAccount": "切换账号",
+    "logout": "退出登录",
+    "language": "语言",
+    "size": "组件大小"
+  },
+  "tagsView": {
+    "placeholder": "标签视图占位"
+  },
+  "settings": {
+    "placeholder": "设置占位"
+  }
+}
+
