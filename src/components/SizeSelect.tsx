@@ -2,21 +2,17 @@ import React from 'react'
 import { Dropdown, Space } from 'antd'
 import { FontSizeOutlined, DownOutlined } from '@ant-design/icons'
 import { useLayout } from '@/layouts/LayoutContext'
-
-const options = [
-  { label: '较大', value: 'large' },
-  { label: '默认', value: 'middle' },
-  { label: '稍小', value: 'small' },
-] as const
+import { useTranslation } from 'react-i18next'
 
 export default function SizeSelect() {
   const { settings, setComponentSize } = useLayout()
-  const items = options.map(opt => ({
-    key: opt.value,
-    label: (
-      <span style={{ opacity: settings.componentSize === opt.value ? 0.5 : 1 }}>{opt.label}</span>
-    )
-  }))
+  const { t } = useTranslation()
+
+  const items = [
+    { key: 'large',  label: <span style={{ opacity: settings.componentSize === 'large'  ? 0.5 : 1 }}>{t('sizeSelect.large')}</span> },
+    { key: 'middle', label: <span style={{ opacity: settings.componentSize === 'middle' ? 0.5 : 1 }}>{t('sizeSelect.middle')}</span> },
+    { key: 'small',  label: <span style={{ opacity: settings.componentSize === 'small'  ? 0.5 : 1 }}>{t('sizeSelect.small')}</span> },
+  ]
 
   return (
     <Dropdown
@@ -26,11 +22,10 @@ export default function SizeSelect() {
       }}
       trigger={["click"]}
     >
-      <Space style={{ cursor: 'pointer' }}>
+      <Space style={{ cursor: 'pointer' }} title={t('navbar.size')}>
         <FontSizeOutlined />
         <DownOutlined />
       </Space>
     </Dropdown>
   )
 }
-

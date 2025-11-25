@@ -6,6 +6,7 @@ import Forbidden from '@/pages/Forbidden'
 import RequireAuth from '@/components/RequireAuth'
 import MainLayout from '@/layouts/MainLayout'
 import Profile from '@/pages/profile'
+import DownloadCenter from '@/pages/downloadCenter'
 
 export interface RouteMeta {
   title?: string
@@ -60,6 +61,12 @@ export const routes: AppRouteObject[] = [
         name: 'Profile',
         element: <Profile />,
         meta: { title: '个人中心', auth: true, hideInMenu: true },
+      },
+      {
+        path: 'download-center',
+        name: 'DownloadCenter',
+        element: <DownloadCenter />,
+        meta: { title: '下载中心', auth: true },
       },
     ],
   },

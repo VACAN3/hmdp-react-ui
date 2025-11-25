@@ -62,8 +62,13 @@ export function updateUserPwd(data) {
   return put('/system/user/profile/updatePwd', data)
 }
 
+// 管理员列表（用于下载中心筛选）
+export function listAdminUser(params: any): Promise<{ rows: any[]; total: number }> {
+  return get<{ rows: any[]; total: number }>('/system/user/listAdminUser', { params })
+}
+
 export default {
   getInfo,
   getUserProfile,
+  listAdminUser,
 }
-

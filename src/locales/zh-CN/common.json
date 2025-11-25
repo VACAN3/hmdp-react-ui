@@ -9,13 +9,23 @@
     "changeAccount": "切换账号",
     "logout": "退出登录",
     "language": "语言",
-    "size": "组件大小"
+    "size": "组件大小",
+    "downloadCenter": "下载中心"
   },
   "tagsView": {
     "placeholder": "标签视图占位"
   },
   "settings": {
     "placeholder": "设置占位"
-  }
+  },
+  "sizeSelect": {
+    "large": "较大",
+    "middle": "默认",
+    "small": "稍小"
+  },
+  "success": "操作成功",
+  "search": "查询",
+  "reset": "重置",
+  "inputPlaceholder": "请输入",
+  "selectPlaceholder": "请选择"
 }
-

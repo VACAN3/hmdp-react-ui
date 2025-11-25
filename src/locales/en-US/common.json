@@ -9,13 +9,23 @@
     "changeAccount": "Switch Account",
     "logout": "Logout",
     "language": "Language",
-    "size": "Size"
+    "size": "Size",
+    "downloadCenter": "DownloadCenter"
   },
   "tagsView": {
     "placeholder": "TagsView Placeholder"
   },
   "settings": {
     "placeholder": "Settings Placeholder"
-  }
+  },
+  "sizeSelect": {
+    "large": "Large",
+    "middle": "Default",
+    "small": "Small"
+  },
+  "success": "Success",
+  "search": "Search",
+  "reset": "Reset",
+  "inputPlaceholder": "Please input",
+  "selectPlaceholder": "Please select"
 }
-

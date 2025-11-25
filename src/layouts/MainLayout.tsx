@@ -1,9 +1,9 @@
 import React from 'react'
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom'
 import { Menu, Dropdown, Avatar, Space, Modal, message, ConfigProvider } from 'antd'
+import { UserOutlined, DownOutlined, SettingOutlined, LogoutOutlined, SwapOutlined, ProfileOutlined, CloudDownloadOutlined } from '@ant-design/icons'
 import zhCN from 'antd/locale/zh_CN'
 import enUS from 'antd/locale/en_US'
-import { UserOutlined, DownOutlined, SettingOutlined, LogoutOutlined, SwapOutlined, ProfileOutlined } from '@ant-design/icons'
 import SizeSelect from '@/components/SizeSelect'
 import LanguageSelect from '@/components/LanguageSelect'
 import { routes, buildMenuFromRoutes } from '@/router/routes'
@@ -46,7 +46,9 @@ function Navbar() {
   const navigate = useNavigate()
   const { hasPermission } = usePermission()
   const toggleOpen = () => (sidebar.opened ? closeSideBar({ withoutAnimation: false }) : openSideBar({ withoutAnimation: false }))
-
+  const jumpDownloadCenter = () => {
+    navigate('/download-center')
+  }
   const onMenuClick = async ({ key }: { key: string }) => {
     switch (key) {
       case 'profile':
@@ -67,7 +69,9 @@ function Navbar() {
           onOk: async () => {
             try {
               await apiLogout()
-            } catch {}
+            } catch (error) {
+              console.log('error', error)
+            }
             removeToken()
             message.success('已退出登录')
             navigate('/login', { replace: true })
@@ -91,6 +95,7 @@ function Navbar() {
     <div className="navbar">
       <button className="nav-btn" onClick={toggleOpen} title={t('navbar.toggleSidebar')}>☰</button>
       <div className="nav-spacer" />
+      <button className="nav-btn" onClick={jumpDownloadCenter} title={t('navbar.downloadCenter')}><CloudDownloadOutlined /></button>
       <button className="nav-btn" onClick={() => toggleSideBarHide()} title={t('navbar.hideSidebar')}>⤢</button>
       <button className="nav-btn" onClick={() => setFixedHeader(!settings.fixedHeader)} title={t('navbar.fixedHeader')}>Hdr</button>
       <button className="nav-btn" onClick={() => setTagsView(!settings.tagsView)} title={t('navbar.tagsView')}>Tags</button>
