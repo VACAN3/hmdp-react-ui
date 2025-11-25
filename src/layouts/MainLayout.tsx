@@ -1,7 +1,8 @@
 import React from 'react'
 import { Outlet, useLocation, Link, useNavigate } from 'react-router-dom'
-import { Menu, Dropdown, Avatar, Space, Modal, message } from 'antd'
+import { Menu, Dropdown, Avatar, Space, Modal, message, ConfigProvider } from 'antd'
 import { UserOutlined, DownOutlined, SettingOutlined, LogoutOutlined, SwapOutlined, ProfileOutlined } from '@ant-design/icons'
+import SizeSelect from '@/components/SizeSelect'
 import { routes, buildMenuFromRoutes } from '@/router/routes'
 import { LayoutProvider, useLayout } from './LayoutContext'
 import { usePermission } from '@/hooks/usePermission'
@@ -88,6 +89,9 @@ function Navbar() {
       <button className="nav-btn" onClick={() => toggleSideBarHide()} title="隐藏侧栏">⤢</button>
       <button className="nav-btn" onClick={() => setFixedHeader(!settings.fixedHeader)} title="固定头部">Hdr</button>
       <button className="nav-btn" onClick={() => setTagsView(!settings.tagsView)} title="标签视图">Tags</button>
+      <div style={{ marginLeft: 8 }}>
+        <SizeSelect />
+      </div>
       <Dropdown menu={{ items: dropdownItems, onClick: onMenuClick }} trigger={["click"]}>
         <Space style={{ cursor: 'pointer', marginLeft: 8 }}>
           <Avatar size={32} icon={<UserOutlined />} />
@@ -115,21 +119,23 @@ function LayoutShell() {
     device === 'mobile' ? 'mobile' : '',
   ].join(' ')
   return (
-    <div className={classObj} style={{ ['--current-color' as any]: settings.theme }}>
-      {device === 'mobile' && sidebar.opened && (
-        <div className="drawer-bg" onClick={() => closeSideBar({ withoutAnimation: false })} />
-      )}
-      {!sidebar.hide && <Sidebar />}
-      <div className={`main-container ${settings.tagsView ? 'hasTagsView' : ''} ${sidebar.hide ? 'sidebarHide' : ''}`}>
-        <div className={settings.fixedHeader ? 'fixed-header' : ''}>
-          <Navbar />
-          {settings.tagsView && <TagsView />}
+    <ConfigProvider componentSize={settings.componentSize}>
+      <div className={classObj} style={{ ['--current-color' as any]: settings.theme }}>
+        {device === 'mobile' && sidebar.opened && (
+          <div className="drawer-bg" onClick={() => closeSideBar({ withoutAnimation: false })} />
+        )}
+        {!sidebar.hide && <Sidebar />}
+        <div className={`main-container ${settings.tagsView ? 'hasTagsView' : ''} ${sidebar.hide ? 'sidebarHide' : ''}`}>
+          <div className={settings.fixedHeader ? 'fixed-header' : ''}>
+            <Navbar />
+            {settings.tagsView && <TagsView />}
+          </div>
+          <div className="app-main"><Outlet /></div>
+          {/* 主题颜色设置抽屉 */}
+          <Settings />
         </div>
-        <div className="app-main"><Outlet /></div>
-        {/* 主题颜色设置抽屉 */}
-        <Settings />
       </div>
-    </div>
+    </ConfigProvider>
   )
 }
 
