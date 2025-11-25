@@ -149,4 +149,6 @@ export const get = <T = any>(url: string, config?: AxiosRequestConfig) =>
 export const post = <T = any>(url: string, data?: any, config?: AxiosRequestConfig) =>
   service.post<T>(url, data, config).then(r => ((r.data as any)?.data ?? (r.data as any)))
 
+export const put = <T = any>(url: string, data?: any, config?: AxiosRequestConfig) =>
+  service.put<T>(url, data, config).then(r => ((r.data as any)?.data ?? (r.data as any)))
 export default service

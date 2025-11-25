@@ -1,0 +1,120 @@
+/* 参考 hmdp-ui 布局样式，简化为 React 版本 */
+:root {
+  --base-sidebar-width: 210px;
+  --fixed-header-bg: #fff;
+}
+
+.app-wrapper {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.drawer-bg {
+  background: #000;
+  opacity: 0.3;
+  width: 100%;
+  top: 0;
+  height: 100%;
+  position: absolute;
+  z-index: 999;
+}
+
+.sidebar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: var(--base-sidebar-width);
+  background: #001529; /* Antd dark sider */
+  overflow: hidden;
+}
+
+.sidebar-container.closed {
+  width: 54px;
+}
+
+.main-container {
+  margin-left: var(--base-sidebar-width);
+}
+
+.hideSidebar .main-container {
+  margin-left: 54px;
+}
+
+.sidebarHide .main-container {
+  margin-left: 0;
+}
+
+.fixed-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 9;
+  width: calc(100% - var(--base-sidebar-width));
+  transition: width 0.28s;
+  background: var(--fixed-header-bg);
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.hideSidebar .fixed-header {
+  width: calc(100% - 54px);
+}
+
+.sidebarHide .fixed-header,
+.mobile .fixed-header {
+  width: 100%;
+}
+
+.navbar {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+}
+.nav-spacer { flex: 1; }
+.nav-btn {
+  height: 28px;
+  padding: 0 10px;
+  margin-left: 8px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.tags-view {
+  height: 34px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  color: #999;
+}
+
+.app-main {
+  padding: 12px;
+}
+
+.hasTagsView .app-main {
+  min-height: calc(100vh - 84px); /* 50 + 34 */
+}
+
+.fixed-header + .app-main {
+  padding-top: 84px; /* navbar + tags */
+}
+
+/* Antd menu fit */
+.sidebar-container .ant-menu {
+  height: 100%;
+  border-inline-end: 0;
+}
+
+@media screen and (max-width: 992px) {
+  .sidebar-container {
+    position: fixed;
+    z-index: 1000;
+  }
+}

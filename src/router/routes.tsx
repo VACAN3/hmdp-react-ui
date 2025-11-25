@@ -5,6 +5,7 @@ import Login from '@/pages/Login'
 import Forbidden from '@/pages/Forbidden'
 import RequireAuth from '@/components/RequireAuth'
 import MainLayout from '@/layouts/MainLayout'
+import Profile from '@/pages/profile'
 
 export interface RouteMeta {
   title?: string
@@ -53,6 +54,12 @@ export const routes: AppRouteObject[] = [
         name: 'Home',
         element: <Demo />,
         meta: { title: '示范页面', auth: true, affix: true },
+      },
+      {
+        path: 'profile',
+        name: 'Profile',
+        element: <Profile />,
+        meta: { title: '个人中心', auth: true, hideInMenu: true },
       },
     ],
   },

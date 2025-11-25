@@ -1,0 +1,21 @@
+/* 个人中心简版样式，仅用于布局占位 */
+.profile-page .text-center {
+  text-align: center;
+}
+.profile-page .list-group {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+}
+.profile-page .list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px dashed #f0f0f0;
+  color: #444;
+}
+.profile-page .pull-right {
+  color: #999;
+}
+
