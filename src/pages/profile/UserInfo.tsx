@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { Form, Input, Select, Button, Row, Col, Spin } from 'antd'
 import type { UserInfoVO } from '@/api/system/user'
+import { useTranslation } from 'react-i18next'
+import { message } from 'antd'
 
 type FormValues = {
   userName?: string
@@ -15,6 +17,7 @@ type FormValues = {
 
 export default function UserInfo({ profile }: { profile: UserInfoVO | null }) {
   const [form] = Form.useForm<FormValues>()
+  const { t } = useTranslation('profile')
 
   useEffect(() => {
     if (!profile) return
@@ -34,65 +37,67 @@ export default function UserInfo({ profile }: { profile: UserInfoVO | null }) {
   const onFinish = async (values: FormValues) => {
     // 业务保存逻辑由你接入，此处先占位
     console.log('提交用户资料：', values)
-    message.info('保存逻辑待接入（仅接入数据源与表单展示）')
+    message.info(t("saveSuccess"))
   }
 
   return (
     <Form form={form} layout="vertical" onFinish={onFinish}>
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item name="userName" label="用户名称">
+          <Form.Item name="userName" label={t("userName")}>
             <Input placeholder="—" disabled />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="deptName" label="所属部门">
+          <Form.Item name="deptName" label={t("deptName")}>
             <Input placeholder="—" disabled />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item name="nickName" label="用户昵称">
-            <Input placeholder="请输入昵称" />
+          <Form.Item name="nickName" label={t("nickName")}>
+            <Input placeholder={t("nickNamePlaceholder")} />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="phonenumber" label="手机号码">
-            <Input placeholder="请输入手机号" />
+          <Form.Item name="phonenumber" label={t("phone")}>
+            <Input placeholder={t("phonePlaceholder")} />
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item name="email" label="用户邮箱">
-            <Input placeholder="请输入邮箱" />
+          <Form.Item name="email" label={t("email")}>
+            <Input placeholder={t("emailPlaceholder")} />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="sex" label="性别">
-            <Select placeholder="请选择">
-              <Select.Option value="0">男</Select.Option>
-              <Select.Option value="1">女</Select.Option>
-              <Select.Option value="2">未知</Select.Option>
+          <Form.Item name="sex" label={t("sex")}>
+            <Select placeholder={t("sexPlaceholder")}>
+              <Select.Option value="0">{t("male")}</Select.Option>
+              <Select.Option value="1">{t("female")}</Select.Option>
+              <Select.Option value="2">{t("unknown")}</Select.Option>
             </Select>
           </Form.Item>
         </Col>
       </Row>
       <Row gutter={16}>
         <Col span={12}>
-          <Form.Item name="roleGroup" label="所属角色">
+          <Form.Item name="roleGroup" label={t("roleGroup")}>
             <Input placeholder="—" disabled />
           </Form.Item>
         </Col>
         <Col span={12}>
-          <Form.Item name="postGroup" label="所属岗位">
+          <Form.Item name="postGroup" label={t("postGroup")}>
             <Input placeholder="—" disabled />
           </Form.Item>
         </Col>
       </Row>
       <div style={{ textAlign: 'right' }}>
-        <Button type="primary" htmlType="submit">保存</Button>
+        <Button type="primary" htmlType="submit">
+          {t("save")}
+        </Button>
       </div>
     </Form>
   )

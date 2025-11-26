@@ -28,4 +28,7 @@
   "reset": "Reset",
   "inputPlaceholder": "Please input",
   "selectPlaceholder": "Please select"
+  ,
+  "refresh": "Refresh",
+  "columnsAndDensity": "Columns & Density"
 }

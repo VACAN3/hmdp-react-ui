@@ -28,4 +28,7 @@
   "reset": "重置",
   "inputPlaceholder": "请输入",
   "selectPlaceholder": "请选择"
+  ,
+  "refresh": "刷新",
+  "columnsAndDensity": "列与密度"
 }

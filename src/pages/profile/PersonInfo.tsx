@@ -1,12 +1,14 @@
 import { Card } from 'antd'
 import UserAvatar from './UserAvatar'
 import type { UserInfoVO } from '@/api/system/user'
+import { useTranslation } from 'react-i18next'
 
 type Props = {
   profile: UserInfoVO | null
 }
 
 export default function PersonInfo({ profile }: Props) {
+  const { t } = useTranslation('profile')
   const user = profile?.user || {}
   const roleGroup = profile?.roleGroup || '—'
   const deptName = user?.dept?.deptName || '—'
@@ -16,33 +18,33 @@ export default function PersonInfo({ profile }: Props) {
   const createTime = (user as any)?.createTime || user?.loginDate || '—'
 
   return (
-    <Card title="个人信息">
+    <Card title={t("personInfo")}>
       <div className="text-center">
         <UserAvatar />
       </div>
       <ul className="list-group list-group-striped">
         <li className="list-group-item">
-          <span>用户名称</span>
+          <span>{t("userName")}</span>
           <div className="pull-right">{userName}</div>
         </li>
         <li className="list-group-item">
-          <span>手机号码</span>
+          <span>{t("phone")}</span>
           <div className="pull-right">{phone}</div>
         </li>
         <li className="list-group-item">
-          <span>用户邮箱</span>
+          <span>{t("email")}</span>
           <div className="pull-right">{email}</div>
         </li>
         <li className="list-group-item">
-          <span>所属部门</span>
+          <span>{t("deptName")}</span>
           <div className="pull-right">{deptName}</div>
         </li>
         <li className="list-group-item">
-          <span>所属角色</span>
+          <span>{t("roleGroup")}</span>
           <div className="pull-right">{roleGroup}</div>
         </li>
         <li className="list-group-item">
-          <span>创建日期</span>
+          <span>{t("createTime")}</span>
           <div className="pull-right">{createTime}</div>
         </li>
       </ul>

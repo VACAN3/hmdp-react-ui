@@ -6,6 +6,8 @@ import dayjs from 'dayjs'
 import { getExportList, download, retry, cancel, getStatusDict, type ExportItem } from '@/api/downloadCenter'
 import { useTranslation } from 'react-i18next'
 import { listAdminUser } from '@/api/system/user'
+import HmTable from '@/components/HmTable/HmTable'
+import type { HmColumn, FilterItem, RequestParams, ActionItem } from '@/components/HmTable/types'
 
 const { RangePicker } = DatePicker
 
@@ -51,14 +53,13 @@ export default function DownloadCenter() {
 
   useEffect(() => {
     getStatusDict().then(setStatusOptions)
-    queryList()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const columns: ColumnsType<ExportItem> = useMemo(() => [
-    { title: t('fileName'), dataIndex: 'fileName', key: 'fileName', width: 200, ellipsis: true },
+  const columns: HmColumn<ExportItem>[] = useMemo(() => [
+    { titleKey: 'fileName', dataIndex: 'fileName', key: 'fileName', width: 200, ellipsis: true },
     {
-      title: t('progress'),
+      titleKey: 'progress',
       dataIndex: 'progress',
       key: 'progress',
       width: 200,
@@ -74,15 +75,15 @@ export default function DownloadCenter() {
         )
       },
     },
-    { title: t('countNow'), dataIndex: 'countNow', key: 'countNow', width: 100 },
-    { title: t('countData'), dataIndex: 'countData', key: 'countData', width: 100 },
-    { title: t('fileSize'), dataIndex: 'fileSize', key: 'fileSize', width: 120 },
-    { title: t('downNum'), dataIndex: 'downNum', key: 'downNum', width: 110 },
-    { title: t('userName'), dataIndex: 'userName', key: 'userName', width: 120 },
-    { title: t('createTime'), dataIndex: 'createTime', key: 'createTime', width: 180 },
-    { title: t('complateTime'), dataIndex: 'complateTime', key: 'complateTime', width: 180 },
+    { titleKey: 'countNow', dataIndex: 'countNow', key: 'countNow', width: 100 },
+    { titleKey: 'countData', dataIndex: 'countData', key: 'countData', width: 100 },
+    { titleKey: 'fileSize', dataIndex: 'fileSize', key: 'fileSize', width: 120 },
+    { titleKey: 'downNum', dataIndex: 'downNum', key: 'downNum', width: 110 },
+    { titleKey: 'userName', dataIndex: 'userName', key: 'userName', width: 120 },
+    { titleKey: 'createTime', dataIndex: 'createTime', key: 'createTime', width: 180 },
+    { titleKey: 'complateTime', dataIndex: 'complateTime', key: 'complateTime', width: 180 },
     {
-      title: t('status'),
+      titleKey: 'status',
       dataIndex: 'status',
       key: 'status',
       width: 120,
@@ -93,7 +94,7 @@ export default function DownloadCenter() {
       },
     },
     {
-      title: t('operate'),
+      titleKey: 'operate',
       key: 'operate',
       width: 160,
       render: (_: any, row: ExportItem) => {
@@ -110,6 +111,66 @@ export default function DownloadCenter() {
       },
     },
   ], [statusOptions, t])
+
+  // HmTable 请求函数模块化
+  const requestExportList = async (params: RequestParams) => {
+    const req = {
+      ...params,
+      createUserIdList: Array.isArray(params.createUserIdList) && params.createUserIdList.length ? params.createUserIdList : '',
+    }
+    const res = await getExportList(req)
+    return { rows: res.rows, total: res.total }
+  }
+
+  // 批量操作模块化
+  const batchDownloadAction: ActionItem<ExportItem> = {
+    key: 'download',
+    textKey: 'batchDownload',
+    icon: <DownloadOutlined />,
+    confirmKey: 'batchDownloadTitle',
+    onClick: async ({ selectedRows, refresh }) => {
+      if (!selectedRows.length) return message.warning(t('selectTip'))
+      const target = selectedRows.filter(r => r.status === 2).map(r => r.asyncExportId).join(',')
+      if (!target) return message.info(t('noFile'))
+      const res = await download({ ids: target })
+      const urls = res.data || []
+      urls.forEach(url => window.open(url, '_blank'))
+      refresh()
+    },
+    disabled: ({ selectedRowKeys }) => !selectedRowKeys.length,
+  }
+
+  const batchRetryAction: ActionItem<ExportItem> = {
+    key: 'retry',
+    textKey: 'batchRetry',
+    icon: <RedoOutlined />,
+    confirmKey: 'batchRetryTitle',
+    onClick: async ({ selectedRows, refresh }) => {
+      if (!selectedRows.length) return message.warning(t('selectTip'))
+      const target = selectedRows.filter(r => r.status === 3 || r.status === -1 || r.status === 1).map(r => r.asyncExportId).join(',')
+      if (!target) return
+      const res = await retry({ ids: target })
+      if (res.data) message.success(tc('success'))
+      refresh()
+    },
+    disabled: ({ selectedRowKeys }) => !selectedRowKeys.length,
+  }
+
+  const batchCancelAction: ActionItem<ExportItem> = {
+    key: 'cancel',
+    textKey: 'batchCancel',
+    icon: <StopOutlined />,
+    confirmKey: 'batchCancelTitle',
+    onClick: async ({ selectedRows, refresh }) => {
+      if (!selectedRows.length) return message.warning(t('selectTip'))
+      const target = selectedRows.filter(r => r.status === 0 || r.status === 1).map(r => r.asyncExportId).join(',')
+      if (!target) return
+      const res = await cancel({ ids: target })
+      if (res.data) message.success(tc('success'))
+      refresh()
+    },
+    disabled: ({ selectedRowKeys }) => !selectedRowKeys.length,
+  }
 
   async function queryList() {
     const values = form.getFieldsValue()
@@ -235,75 +296,23 @@ export default function DownloadCenter() {
     })
   }
 
-  return (
-    <Card title={tc('navbar.downloadCenter')} bordered={false}>
-      <Form form={form} layout="vertical" onFinish={queryList} initialValues={{ complate: 0 }}>
-        <Row gutter={16}>
-          <Col span={6}>
-            <Form.Item name="fileName" label={t('fileName')}>
-              <Input placeholder={tc('inputPlaceholder')} allowClear />
-            </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item name="statusList" label={t('status')}>
-              <Select
-                mode="multiple"
-                allowClear
-                options={statusOptions.map(o => ({ value: o.value, label: o.label }))}
-                placeholder={tc('selectPlaceholder')}
-              />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item label={t('timeRange')}>
-              <Space.Compact style={{ width: '100%' }}>
-                <Form.Item name="complate" noStyle>
-                  <Select style={{ width: 120 }} options={[{ value: 0, label: t('complateComplete') }, { value: 1, label: t('complateGenerate') }]} />
-                </Form.Item>
-                <Form.Item name="time" noStyle>
-                  <RangePicker
-                    style={{ width: '100%' }}
-                    onChange={() => void 0}
-                    disabledDate={d => d.isAfter(dayjs())}
-                  />
-                </Form.Item>
-              </Space.Compact>
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item name="createUserIdList" label={t('createUserIdList')}>
-              <Select
-                mode="multiple"
-                showSearch
-                filterOption={false}
-                onSearch={remoteUsers}
-                onDropdownVisibleChange={(open) => open && remoteUsers('')}
-                loading={userLoading}
-                options={userOptions}
-                allowClear
-                placeholder={tc('selectPlaceholder')}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Space style={{ marginBottom: 16 }}>
-          <Button type="primary" onClick={queryList}>{tc('search')}</Button>
-          <Button onClick={() => { form.resetFields(); refresh() }}>{tc('reset')}</Button>
-          <Button plain={false as any} disabled={!selectedRowKeys.length} icon={<DownloadOutlined />} onClick={handleDownload}>{t('batchDownload')}</Button>
-          <Button plain={false as any} disabled={!selectedRowKeys.length} icon={<RedoOutlined />} onClick={handleRetry}>{t('batchRetry')}</Button>
-          <Button plain={false as any} disabled={!selectedRowKeys.length} danger icon={<StopOutlined />} onClick={handleCancel}>{t('batchCancel')}</Button>
-        </Space>
-      </Form>
+  const filters: FilterItem[] = [
+    { name: 'fileName', labelKey: 'fileName', component: 'input' },
+    { name: 'statusList', labelKey: 'status', component: 'multiSelect', props: { options: statusOptions.map(o => ({ value: o.value, label: o.label })) } },
+    { name: 'time', labelKey: 'timeRange', component: 'dateRange' },
+    { name: 'createUserIdList', labelKey: 'createUserIdList', component: 'multiSelect', props: { options: userOptions, showSearch: true, filterOption: false, onSearch: remoteUsers, onDropdownVisibleChange: (open: boolean) => open && remoteUsers(''), loading: userLoading } },
+  ]
 
-      <Table
-        rowKey="asyncExportId"
-        bordered
-        loading={loading}
-        dataSource={dataSource}
-        columns={columns}
-        pagination={{ current: page, pageSize, total, showSizeChanger: true, onChange: (p, ps) => { setPage(p); setPageSize(ps); queryList() } }}
-        rowSelection={{ selectedRowKeys, onChange: (keys, rows) => { setSelectedRowKeys(keys); setSelectedRows(rows as ExportItem[]) } }}
-      />
-    </Card>
+  return (
+    <HmTable<ExportItem>
+      title={tc('navbar.downloadCenter')}
+      rowKey="asyncExportId"
+      columns={columns}
+      filters={filters}
+      request={requestExportList}
+      batchActions={[batchDownloadAction, batchRetryAction, batchCancelAction]}
+      persistKey="download-center"
+      i18nNs="downloadCenter"
+    />
   )
 }
