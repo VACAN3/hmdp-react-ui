@@ -8,6 +8,7 @@ import SizeSelect from '@/components/SizeSelect'
 import LanguageSelect from '@/components/LanguageSelect'
 import { routes, buildMenuFromRoutes } from '@/router/routes'
 import { LayoutProvider, useLayout } from './LayoutContext'
+import TagsView from './components/TagsView'
 import { usePermission } from '@/hooks/usePermission'
 import { logout as apiLogout } from '@/api/login'
 import { removeToken } from '@/utils/auth'
@@ -113,11 +114,6 @@ function Navbar() {
       </Dropdown>
     </div>
   )
-}
-
-function TagsView() {
-  const { t } = useTranslation()
-  return <div className="tags-view">{t('tagsView.placeholder')}</div>
 }
 
 function Settings() {

@@ -23,6 +23,7 @@ export default defineConfig([
       // 允许使用 any 类型，不在 ESLint 中报错
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-expressions': 'off'
     },
   },
 ])
