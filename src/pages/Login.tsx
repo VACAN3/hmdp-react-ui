@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Form, Input, message, Select, Image, Row, Col } from 'antd'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { setToken, setAuthInfo } from '@/utils/auth'
 import { login, getCodeImg, getTenantList } from '@/api/login'
 import { getInfo } from '@/api/system/user'
@@ -19,6 +20,7 @@ type LoginFormValues = {
 }
 
 export default function Login() {
+  const { t } = useTranslation()
   const [form] = Form.useForm<LoginFormValues>()
   const navigate = useNavigate()
   const location = useLocation() as any
@@ -106,7 +108,7 @@ export default function Login() {
         grantType: 'password',
       } as any)
       const accessToken = (res as any)?.access_token || (res as any)?.data?.access_token
-      if (!accessToken) throw new Error('登录响应缺少 access_token')
+      if (!accessToken) throw new Error(t('login.missingAccessToken'))
 
       setToken(accessToken)
 
@@ -120,7 +122,7 @@ export default function Login() {
         // 忽略 getInfo 错误，至少完成登录
       }
 
-      message.success('登录成功')
+      message.success(t('login.loginSuccess'))
       const to = location.state?.from?.pathname || '/'
       navigate(to, { replace: true })
       setLoading(false)
@@ -167,41 +169,41 @@ export default function Login() {
                     {tenantEnabled ? (
                       <>
                         <div className="user-name-box">
-                          <span className="user-name">租户</span>
+                          <span className="user-name">{t('login.tenant')}</span>
                         </div>
-                        <Form.Item name="tenantId" rules={[{ required: true, message: '请选择租户' }]}> 
-                          <Select placeholder="请选择/输入公司名称" showSearch filterOption={(input, option) => (option?.label as string)?.toLowerCase().includes(input.toLowerCase())} options={tenantList.map(t => ({ label: t.companyName, value: t.tenantId }))} />
+                        <Form.Item name="tenantId" rules={[{ required: true, message: t('login.selectTenant') }]}> 
+                          <Select placeholder={t('login.tenantPlaceholder')} showSearch filterOption={(input, option) => (option?.label as string)?.toLowerCase().includes(input.toLowerCase())} options={tenantList.map(t => ({ label: t.companyName, value: t.tenantId }))} />
                         </Form.Item>
                       </>
                     ) : (
                       <>
                         <div className="user-name-box">
-                          <span className="user-name">租户ID</span>
+                          <span className="user-name">{t('login.tenantId')}</span>
                         </div>
                         <Form.Item name="tenantId"> 
-                          <Input placeholder="如启用多租户，请填写或选择租户" />
+                          <Input placeholder={t('login.tenantIdPlaceholder')} />
                         </Form.Item>
                       </>
                     )}
 
                     <div className="user-name-box">
-                      <span className="user-name">海麦工号</span>
+                      <span className="user-name">{t('login.username')}</span>
                     </div>
-                    <Form.Item name="username" rules={[{ required: true, message: '请输入账号' }]}> 
-                      <Input placeholder="请输入" autoComplete="username" prefix={<span className="user-icon" />} />
+                    <Form.Item name="username" rules={[{ required: true, message: t('login.inputUsername') }]}> 
+                      <Input placeholder={t('common.input')} autoComplete="username" prefix={<span className="user-icon" />} />
                     </Form.Item>
 
                     <div className="user-name-box">
-                      <span className="user-name">登录密码</span>
+                      <span className="user-name">{t('login.password')}</span>
                       <div className="rember-password" onClick={toggleRemember}>
                         <div className={`rember-password-icon ${form.getFieldValue('rememberMe') ? 'is-selected' : ''}`}></div>
-                        <span style={{ color: '#8993a3' }}>记住密码</span>
+                        <span style={{ color: '#8993a3' }}>{t('login.rememberMe')}</span>
                       </div>
                     </div>
-                    <Form.Item name="password" rules={[{ required: true, message: '请输入密码' }]}> 
+                    <Form.Item name="password" rules={[{ required: true, message: t('login.inputPassword') }]}> 
                       <Input
                         type={passwordVisible ? 'text' : 'password'}
-                        placeholder="请输入"
+                        placeholder={t('common.input')}
                         autoComplete="current-password"
                         prefix={<span className="password-icon" />}
                         suffix={
@@ -223,14 +225,14 @@ export default function Login() {
                         <div className="login-code-box">
                           <Row gutter={8} align="middle">
                             <Col flex="auto">
-                              <Form.Item name="code" rules={[{ required: true, message: '请输入验证码' }]}> 
-                                <Input placeholder="验证码" prefix={<span className="code-icon" />} onPressEnter={() => form.submit()} />
+                              <Form.Item name="code" rules={[{ required: true, message: t('login.inputCaptcha') }]}> 
+                                <Input placeholder={t('login.captcha')} prefix={<span className="code-icon" />} onPressEnter={() => form.submit()} />
                               </Form.Item>
                             </Col>
                             <Col>
                               {codeUrl && (
                                 <div className="login-code">
-                                  <Image src={codeUrl} alt="验证码" preview={false} height={40} onClick={fetchCode} className="login-code-img" />
+                                  <Image src={codeUrl} alt={t('login.captcha')} preview={false} height={40} onClick={fetchCode} className="login-code-img" />
                                 </div>
                               )}
                             </Col>
@@ -240,19 +242,19 @@ export default function Login() {
                     )}
 
                     <div className={`login-btn ${loading ? 'loading' : ''}`} onClick={() => form.submit()}>
-                      <span>{loading ? '登录中...' : 'Sign\u00A0In'}</span>
+                      <span>{loading ? t('login.loggingIn') : t('login.signIn')}</span>
                     </div>
                   </Form>
                 ) : (
                   <div className="dd-code-box" style={{ height: 200, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8993a3' }}>
-                    钉钉扫码登录（占位）
+                    {t('login.dingTalkPlaceholder')}
                   </div>
                 )}
               </div>
             </div>
           </div>
           <div className="el-login-footer">
-            <span>Copyright © 2024 广州海麦 All Rights Reserved.</span>
+            <span>{t('login.copyright')}</span>
           </div>
         </div>
       </div>

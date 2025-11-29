@@ -30,6 +30,7 @@ const LanguageSelect: React.FC = () => {
 
   const onClick: NonNullable<React.ComponentProps<typeof Dropdown>['menu']>['onClick'] = ({ key }) => {
     const nextLang = key as 'zh-CN' | 'en-US'
+    console.log("🚀 ~ onClick ~ nextLang:", nextLang)
     setLanguage(nextLang)
     i18n.changeLanguage(nextLang)
   }

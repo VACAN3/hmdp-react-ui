@@ -1,0 +1,108 @@
+{
+  "batchCancelTitle": "",
+  "batchDownloadTitle": "",
+  "batchRetryTitle": "",
+  "cancel": "",
+  "cancelTitle": "",
+  "columnsAndDensity": "Columns & Density",
+  "common": {
+    "backHome": "",
+    "cancel": "",
+    "confirm": "",
+    "forbiddenMessage": "",
+    "input": "",
+    "refresh": "",
+    "save": "",
+    "updateSuccess": ""
+  },
+  "countText": "",
+  "demo": {
+    "email": "",
+    "loadError": "",
+    "name": "",
+    "phone": "",
+    "title": "",
+    "website": ""
+  },
+  "download": "",
+  "downloadTitle": "",
+  "inputPlaceholder": "Please input",
+  "login": {
+    "captcha": "",
+    "copyright": "",
+    "dingTalkPlaceholder": "",
+    "inputCaptcha": "",
+    "inputPassword": "",
+    "inputUsername": "",
+    "loggingIn": "",
+    "loginSuccess": "",
+    "missingAccessToken": "",
+    "password": "",
+    "rememberMe": "",
+    "selectTenant": "",
+    "signIn": "",
+    "tenant": "",
+    "tenantId": "",
+    "tenantIdPlaceholder": "",
+    "tenantPlaceholder": "",
+    "username": ""
+  },
+  "navbar": {
+    "changeAccount": "Switch Account",
+    "downloadCenter": "DownloadCenter",
+    "fixedHeader": "Fixed Header",
+    "hideSidebar": "Hide Sidebar",
+    "language": "Language",
+    "layoutSettings": "Layout Settings",
+    "logout": "Logout",
+    "profile": "Profile",
+    "size": "Size",
+    "tagsView": "Tags View",
+    "toggleSidebar": "Toggle Sidebar"
+  },
+  "noFile": "",
+  "profile": {
+    "confirmPassword": "",
+    "inputConfirmPassword": "",
+    "inputNewPassword": "",
+    "inputOldPassword": "",
+    "newPassword": "",
+    "oldPassword": ""
+  },
+  "progressText": "",
+  "refresh": "Refresh",
+  "request": {
+    "error": "",
+    "fail": "",
+    "networkError": "",
+    "sessionExpired": ""
+  },
+  "reset": "Reset",
+  "retry": "",
+  "retryTitle": "",
+  "search": "Search",
+  "selectPlaceholder": "Please select",
+  "selectTip": "",
+  "settings": {
+    "placeholder": "Settings Placeholder"
+  },
+  "sizeSelect": {
+    "large": "Large",
+    "middle": "Default",
+    "small": "Small"
+  },
+  "success": "Success",
+  "system": {
+    "confirmLogout": "Are you sure you want to log out and exit the system?",
+    "logoutSuccess": "Logged out",
+    "tip": "Tip"
+  },
+  "tagsView": {
+    "closeAll": "Close All",
+    "closeCurrent": "Close Current",
+    "closeLeft": "Close Left",
+    "closeOthers": "Close Others",
+    "closeRight": "Close Right",
+    "placeholder": "TagsView Placeholder"
+  }
+}

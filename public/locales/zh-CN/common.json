@@ -1,0 +1,111 @@
+{
+  "batchCancelTitle": "批量取消",
+  "batchDownloadTitle": "批量下载",
+  "batchRetryTitle": "批量重试",
+  "cancel": "取消",
+  "cancelTitle": "取消任务",
+  "columnsAndDensity": "列与密度",
+  "common": {
+    "backHome": "返回首页",
+    "cancel": "取消",
+    "confirm": "确定",
+    "forbidden": "无权限",
+    "forbiddenMessage": "抱歉，您没有访问此页面的权限。",
+    "input": "请输入",
+    "refresh": "刷新",
+    "save": "保存",
+    "updateSuccess": "修改成功"
+  },
+  "countText": "共 {count} 条",
+  "demo": {
+    "email": "邮箱",
+    "loadError": "加载失败，请重试",
+    "name": "姓名",
+    "phone": "电话",
+    "title": "示范页面：客户列表",
+    "website": "网站"
+  },
+  "download": "下载",
+  "downloadTitle": "下载文件",
+  "inputPlaceholder": "请输入",
+  "login": {
+    "captcha": "验证码",
+    "copyright": "Copyright © 2024 广州海麦 All Rights Reserved.",
+    "dingTalkPlaceholder": "钉钉扫码登录（占位）",
+    "inputCaptcha": "请输入验证码",
+    "inputPassword": "请输入密码",
+    "inputUsername": "请输入账号",
+    "loggingIn": "登录中...",
+    "loginSuccess": "登录成功",
+    "missingAccessToken": "登录响应缺少 access_token",
+    "password": "登录密码",
+    "rememberMe": "记住密码",
+    "selectTenant": "请选择租户",
+    "signIn": "Sign In",
+    "tenant": "租户",
+    "tenantId": "租户ID",
+    "tenantIdPlaceholder": "如启用多租户，请填写或选择租户",
+    "tenantPlaceholder": "请选择/输入公司名称",
+    "title": "登录",
+    "username": "海麦工号"
+  },
+  "navbar": {
+    "changeAccount": "切换账号",
+    "demo": "示范页面",
+    "downloadCenter": "下载中心",
+    "fixedHeader": "固定头部",
+    "hideSidebar": "隐藏侧栏",
+    "language": "语言",
+    "layoutSettings": "布局设置",
+    "logout": "退出登录",
+    "profile": "个人中心",
+    "size": "组件大小",
+    "tagsView": "标签视图",
+    "toggleSidebar": "切换侧栏"
+  },
+  "noFile": "暂无文件",
+  "profile": {
+    "confirmPassword": "确认密码",
+    "inputConfirmPassword": "请确认密码",
+    "inputNewPassword": "请输入新密码",
+    "inputOldPassword": "请输入旧密码",
+    "newPassword": "新密码",
+    "oldPassword": "旧密码"
+  },
+  "progressText": "进度",
+  "refresh": "刷新",
+  "request": {
+    "error": "请求失败: {{status}}",
+    "fail": "请求失败",
+    "networkError": "网络错误",
+    "sessionExpired": "会话已过期，请重新登录"
+  },
+  "reset": "重置",
+  "retry": "重试",
+  "retryTitle": "重试任务",
+  "search": "查询",
+  "selectPlaceholder": "请选择",
+  "selectTip": "请选择一项",
+  "settings": {
+    "placeholder": "设置占位"
+  },
+  "sizeSelect": {
+    "large": "较大",
+    "middle": "默认",
+    "small": "稍小"
+  },
+  "success": "操作成功",
+  "system": {
+    "confirmLogout": "确定注销并退出系统吗？",
+    "logoutSuccess": "已退出登录",
+    "tip": "提示"
+  },
+  "tagsView": {
+    "closeAll": "关闭全部",
+    "closeCurrent": "关闭当前",
+    "closeLeft": "关闭左侧",
+    "closeOthers": "关闭其他",
+    "closeRight": "关闭右侧",
+    "placeholder": "标签视图占位"
+  }
+}

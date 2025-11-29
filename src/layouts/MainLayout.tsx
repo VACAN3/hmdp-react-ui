@@ -19,10 +19,12 @@ function Sidebar() {
   const location = useLocation()
   const menuTree = buildMenuFromRoutes(routes)
   const { sidebar } = useLayout()
+  const { t } = useTranslation()
+
   const toItems = (nodes: typeof menuTree): NonNullable<React.ComponentProps<typeof Menu>['items']> => {
     const mapNode = (n: (typeof menuTree)[number]): NonNullable<React.ComponentProps<typeof Menu>['items']>[number] => ({
       key: n.path,
-      label: <Link to={n.path}>{n.title}</Link>,
+      label: <Link to={n.path}>{t(n.title)}</Link>, // 重点，配合路由title变量动态适配
       icon: n.icon,
       children: n.children?.map(mapNode),
     })
@@ -43,7 +45,7 @@ function Sidebar() {
 
 function Navbar() {
   const { sidebar, openSideBar, closeSideBar, toggleSideBarHide, settings, setFixedHeader, setTagsView } = useLayout()
-  const { t } = useTranslation()
+  const { t } = useTranslation('common')
   const navigate = useNavigate()
   const { hasPermission } = usePermission()
   const toggleOpen = () => (sidebar.opened ? closeSideBar({ withoutAnimation: false }) : openSideBar({ withoutAnimation: false }))
@@ -56,17 +58,17 @@ function Navbar() {
         navigate('/profile')
         break
       case 'layout':
-        message.info('布局设置占位（可接入 Settings 抽屉）')
+        message.info(t('settings.placeholder'))
         break
       case 'changeAccount':
         navigate('/login')
         break
       case 'logout':
         Modal.confirm({
-          title: '提示',
-          content: '确定注销并退出系统吗？',
-          okText: '确定',
-          cancelText: '取消',
+          title: t('system.tip'),
+          content: t('system.confirmLogout'),
+          okText: t('common.confirm'),
+          cancelText: t('common.cancel'),
           onOk: async () => {
             try {
               await apiLogout()
@@ -74,7 +76,7 @@ function Navbar() {
               console.log('error', error)
             }
             removeToken()
-            message.success('已退出登录')
+            message.success(t('system.logoutSuccess'))
             navigate('/login', { replace: true })
           },
         })

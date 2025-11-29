@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
-import { message } from 'antd'
+import { message, Spin } from 'antd'
 import './i18n'
 import 'antd/dist/reset.css'
 import './index.css'
@@ -15,8 +15,10 @@ message.config({ top: 16, maxCount: 3, duration: 2 })
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter basename={(import.meta.env.VITE_APP_CONTEXT_PATH || '/').replace(/\\\/$/, '')}>
-        <App />
+      <BrowserRouter basename={(import.meta.env.VITE_APP_CONTEXT_PATH || '/').replace(/\/$/, '')}>
+        <Suspense fallback={<Spin size="large" style={{ display: 'flex', justifyContent: 'center', marginTop: 100 }} />}>
+          <App />
+        </Suspense>
       </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>,

@@ -1,5 +1,6 @@
 ﻿import axios, { AxiosInstance, AxiosError, AxiosResponse, AxiosRequestConfig } from 'axios'
 import { message } from 'antd'
+import i18n from '@/i18n'
 import { TOKEN_KEY, removeToken } from '@/utils/auth'
 import { encrypt as rsaEncrypt, decrypt as rsaDecrypt } from '@/utils/jsencrypt'
 import { generateAesKey, encryptBase64, decryptBase64, encryptWithAes, decryptWithAes } from '@/utils/crypto'
@@ -81,7 +82,7 @@ service.interceptors.response.use(
           const text = await (response.data as Blob).text()
           const json = JSON.parse(text)
           const code = json?.code ?? json?.status
-          const msg = json?.msg || json?.message || '请求失败'
+          const msg = json?.msg || json?.message || i18n.t('request.fail')
           if (!isSuccess(code)) {
             if (needRelogin(code)) {
               removeToken()
@@ -107,10 +108,10 @@ service.interceptors.response.use(
     const data = response.data as any
     const code = data?.code ?? data?.status ?? HttpStatus.SUCCESS
     if (!isSuccess(code)) {
-      const msg = data?.msg || data?.message || '请求失败'
+      const msg = data?.msg || data?.message || i18n.t('request.fail')
       // 未授权需重定向登录
       if (needRelogin(code)) {
-        message.error('登录已过期，请重新登录')
+        message.error(i18n.t('request.sessionExpired'))
         removeToken()
         const base = (import.meta.env.VITE_APP_CONTEXT_PATH || '/').replace(/\/?$/, '/')
         setTimeout(() => {
@@ -127,16 +128,16 @@ service.interceptors.response.use(
   (error: AxiosError) => {
     const status = error.response?.status
     if (status === 401) {
-      message.error('登录已过期，请重新登录')
+      message.error(i18n.t('request.sessionExpired'))
       removeToken()
       const base = (import.meta.env.VITE_APP_CONTEXT_PATH || '/').replace(/\/?$/, '/')
       setTimeout(() => {
         window.location.href = `${base}login`
       }, 1000)
     } else if (status) {
-      message.error(`请求错误(${status})`)
+      message.error(i18n.t('request.error', { status }))
     } else {
-      message.error('网络异常，请检查连接')
+      message.error(i18n.t('request.networkError'))
     }
     return Promise.reject(error)
   }

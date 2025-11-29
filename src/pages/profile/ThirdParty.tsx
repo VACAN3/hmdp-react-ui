@@ -1,11 +1,13 @@
 import React from 'react'
 import { Alert } from 'antd'
+import { useTranslation } from 'react-i18next'
 import type { UserInfoVO } from '@/api/system/user'
 
 export default function ThirdParty({ profile }: { profile: UserInfoVO | null }) {
+  const { t } = useTranslation('profile')
   return (
     <div>
-      <Alert message="第三方应用占位：请接入授权列表与绑定/解绑" type="success" showIcon />
+      <Alert message={t('thirdPartyPlaceholder')} type="success" showIcon />
     </div>
   )
 }

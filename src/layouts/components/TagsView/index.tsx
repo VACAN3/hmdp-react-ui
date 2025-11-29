@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Dropdown, MenuProps } from 'antd'
 import { CloseOutlined, ReloadOutlined, ArrowLeftOutlined, ArrowRightOutlined, ClearOutlined, DashOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 import { useLayout } from '../../LayoutContext'
 import { routes, AppRouteObject, RouteMeta } from '@/router/routes'
 import './style.css'
@@ -67,6 +68,7 @@ function setStorage(list: VisitedView[]) {
 }
 
 export default function TagsView() {
+  const { t } = useTranslation('common')
   const { settings } = useLayout()
   const location = useLocation()
   const navigate = useNavigate()
@@ -202,13 +204,13 @@ export default function TagsView() {
   }
 
   const menuItems: MenuProps['items'] = [
-    { key: 'refresh', label: '刷新', icon: <ReloadOutlined /> },
+    { key: 'refresh', label: t('common.refresh'), icon: <ReloadOutlined /> },
     { type: 'divider' },
-    { key: 'close', label: '关闭当前', icon: <CloseOutlined /> },
-    { key: 'closeLeft', label: '关闭左侧', icon: <ArrowLeftOutlined /> },
-    { key: 'closeRight', label: '关闭右侧', icon: <ArrowRightOutlined /> },
-    { key: 'closeOthers', label: '关闭其他', icon: <DashOutlined /> },
-    { key: 'closeAll', label: '关闭全部', icon: <ClearOutlined /> },
+    { key: 'close', label: t('tagsView.closeCurrent'), icon: <CloseOutlined /> },
+    { key: 'closeLeft', label: t('tagsView.closeLeft'), icon: <ArrowLeftOutlined /> },
+    { key: 'closeRight', label: t('tagsView.closeRight'), icon: <ArrowRightOutlined /> },
+    { key: 'closeOthers', label: t('tagsView.closeOthers'), icon: <DashOutlined /> },
+    { key: 'closeAll', label: t('tagsView.closeAll'), icon: <ClearOutlined /> },
   ]
 
   const onContextMenu = (v: VisitedView) => (e: React.MouseEvent) => {
@@ -229,7 +231,7 @@ export default function TagsView() {
               onClick={() => navigate(v.fullPath)}
               onContextMenu={onContextMenu(v)}
             >
-              <span className="tag-title">{v.title || v.name || v.path}</span>
+              <span className="tag-title">{t(v.title || v.name || v.path)}</span>
               {!isAffix(v) && (
                 <CloseOutlined className="tag-close" onClick={(e) => { e.stopPropagation(); close(v) }} />
               )}

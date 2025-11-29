@@ -23,8 +23,11 @@ export interface RouteMeta {
 }
 
 export interface AppRouteObject extends RouteObject {
+  path?: string
   name?: string
   meta?: RouteMeta
+  index?: boolean
+  element?: React.ReactNode
   children?: AppRouteObject[]
 }
 
@@ -36,13 +39,13 @@ export const routes: AppRouteObject[] = [
     path: '/login',
     name: 'Login',
     element: <Login />,
-    meta: { title: '登录', auth: false, hideInMenu: true },
+    meta: { title: 'login.title', auth: false, hideInMenu: true },
   },
   {
     path: '/403',
     name: 'Forbidden',
     element: <Forbidden />,
-    meta: { title: '无权限', auth: false, hideInMenu: true },
+    meta: { title: 'common.forbidden', auth: false, hideInMenu: true },
   },
   // 主布局路由，子页面在此之下
   {
@@ -54,19 +57,19 @@ export const routes: AppRouteObject[] = [
         index: true,
         name: 'Home',
         element: <Demo />,
-        meta: { title: '示范页面', auth: true, affix: true },
+        meta: { title: 'navbar.demo', auth: true, affix: true },
       },
       {
         path: 'profile',
         name: 'Profile',
         element: <Profile />,
-        meta: { title: '个人中心', auth: true, hideInMenu: true },
+        meta: { title: 'navbar.profile', auth: true, hideInMenu: true },
       },
       {
         path: 'download-center',
         name: 'DownloadCenter',
         element: <DownloadCenter />,
-        meta: { title: '下载中心', auth: true },
+        meta: { title: 'navbar.downloadCenter', auth: true },
       },
     ],
   },
