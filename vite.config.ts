@@ -29,6 +29,12 @@ export default defineConfig(({ mode }) => {
           ws: true,
           rewrite: (path) => path.replace(new RegExp('^' + env.VITE_APP_BASE_API), ''),
         },
+        '/ai': {
+          target: env.VITE_APP_CHAT_URL,
+          changeOrigin: true,
+          ws: true,
+          rewrite: (path) => path.replace(/^\/ai/, ''),
+        },
       },
     },
   }

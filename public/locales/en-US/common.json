@@ -50,6 +50,8 @@
   "navbar": {
     "changeAccount": "Switch Account",
     "downloadCenter": "DownloadCenter",
+    "aiChat": "AI Chat",
+    "aiImage": "AI Image",
     "fixedHeader": "Fixed Header",
     "hideSidebar": "Hide Sidebar",
     "language": "Language",

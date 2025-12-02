@@ -1,0 +1,15 @@
+{
+  "imgSession": "Image Sessions",
+  "newTempImgSession": "New Temp Image Session",
+  "imgGen": "Image Generation",
+  "prompt": "Prompt",
+  "promptPlaceholder": "Describe the image you want",
+  "model": "Model",
+  "size": "Size",
+  "quality": "Quality",
+  "style": "Style",
+  "generate": "Generate",
+  "genRecords": "Generation Records",
+  "result": "Result"
+}
+

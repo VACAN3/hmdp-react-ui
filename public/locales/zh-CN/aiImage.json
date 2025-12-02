@@ -1,0 +1,15 @@
+{
+  "imgSession": "图片会话",
+  "newTempImgSession": "新建图片临时会话",
+  "imgGen": "图片生成",
+  "prompt": "描述",
+  "promptPlaceholder": "描述你想要生成的图片",
+  "model": "模型",
+  "size": "尺寸",
+  "quality": "质量",
+  "style": "风格",
+  "generate": "生成",
+  "genRecords": "生成记录",
+  "result": "结果"
+}
+

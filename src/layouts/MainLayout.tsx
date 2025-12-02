@@ -93,7 +93,7 @@ function Navbar() {
     { type: 'divider' as const },
     { key: 'logout', label: t('navbar.logout'), icon: <LogoutOutlined /> },
   ].filter(Boolean) as any
-  
+
   return (
     <div className="navbar">
       <button className="nav-btn" onClick={toggleOpen} title={t('navbar.toggleSidebar')}>☰</button>

@@ -7,6 +7,8 @@ import RequireAuth from '@/components/RequireAuth'
 import MainLayout from '@/layouts/MainLayout'
 import Profile from '@/pages/profile'
 import DownloadCenter from '@/pages/downloadCenter'
+import ChatPage from '@/pages/ai/Chat'
+import ImagePage from '@/pages/ai/Image'
 
 export interface RouteMeta {
   title?: string
@@ -70,6 +72,18 @@ export const routes: AppRouteObject[] = [
         name: 'DownloadCenter',
         element: <DownloadCenter />,
         meta: { title: 'navbar.downloadCenter', auth: true },
+      },
+      {
+        path: 'ai/chat',
+        name: 'AiChat',
+        element: <ChatPage />,
+        meta: { title: 'navbar.aiChat', auth: true, permissions: ['chatgpt:chat:sse'] },
+      },
+      {
+        path: 'ai/image',
+        name: 'AiImage',
+        element: <ImagePage />,
+        meta: { title: 'navbar.aiImage', auth: true, permissions: ['chatgpt:chat:img:generation'] },
       },
     ],
   },

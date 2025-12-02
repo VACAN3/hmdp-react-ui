@@ -1,0 +1,16 @@
+{
+  "chat": "Chat",
+  "history": "History",
+  "model": "Model",
+  "newTempSession": "New Temp Session",
+  "platform": "Platform",
+  "question": "Question",
+  "questionPlaceholder": "Enter your question",
+  "send": "Send",
+  "sendStream": "Send (Stream)",
+  "sendSync": "Send (Sync)",
+  "session": "Sessions",
+  "stop": "Stop",
+  "streamReply": "Stream Reply",
+  "temperature": "Temperature"
+}

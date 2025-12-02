@@ -1,0 +1,16 @@
+{
+  "chat": "对话",
+  "history": "历史",
+  "model": "模型",
+  "newTempSession": "新建临时会话",
+  "platform": "平台",
+  "question": "问题",
+  "questionPlaceholder": "输入你的问题",
+  "send": "发送",
+  "sendStream": "流式发送",
+  "sendSync": "同步发送",
+  "session": "会话",
+  "stop": "停止",
+  "streamReply": "流式回复",
+  "temperature": "温度"
+}

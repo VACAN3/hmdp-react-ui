@@ -18,7 +18,7 @@ const service: AxiosInstance = axios.create({
 })
 
 service.interceptors.request.use(
-  (config) => {
+  (config: any) => {
     const token = localStorage.getItem(TOKEN_KEY)
     console.log("🚀 ~ token:", token)
     const isTokenDisabled = (config.headers as any)?.isToken === false
@@ -29,6 +29,19 @@ service.interceptors.request.use(
         Authorization: `Bearer ${token}`,
       }
     }
+
+    /**
+     * 根据请求路径自动选择后端基地址：
+     *    普通业务走 VITE_APP_BASE_API
+     *    AI 业务走 VITE_APP_CHAT_URL
+     * 
+     * 开发环境通过 Vite 代理 /ai 转发至 VITE_APP_CHAT_URL，生产环境直接请求绝对地址
+     */
+    const apiBase = import.meta.env.VITE_APP_BASE_API || '/api'
+    const chatEnv = import.meta.env.VITE_APP_CHAT_URL
+    const chatBase = import.meta.env.DEV ? '/ai' : (chatEnv || '/ai')
+    const path = String(config.url || '')
+    config.baseURL = /^\/(chatgpt|chat)(\/|$)/.test(path) ? chatBase : apiBase
 
     // 是否启用前端加密，仅对 POST/PUT 的 body 加密
     const method = (config.method || 'get').toLowerCase()
@@ -82,7 +95,7 @@ service.interceptors.response.use(
           const text = await (response.data as Blob).text()
           const json = JSON.parse(text)
           const code = json?.code ?? json?.status
-          const msg = json?.msg || json?.message || i18n.t('request.fail')
+          const msg = json?.msg || json?.message || i18n.t('common:request.fail')
           if (!isSuccess(code)) {
             if (needRelogin(code)) {
               removeToken()
@@ -108,10 +121,10 @@ service.interceptors.response.use(
     const data = response.data as any
     const code = data?.code ?? data?.status ?? HttpStatus.SUCCESS
     if (!isSuccess(code)) {
-      const msg = data?.msg || data?.message || i18n.t('request.fail')
+      const msg = data?.msg || data?.message || i18n.t('common:request.fail')
       // 未授权需重定向登录
       if (needRelogin(code)) {
-        message.error(i18n.t('request.sessionExpired'))
+        message.error(i18n.t('common:request.sessionExpired'))
         removeToken()
         const base = (import.meta.env.VITE_APP_CONTEXT_PATH || '/').replace(/\/?$/, '/')
         setTimeout(() => {
@@ -128,16 +141,16 @@ service.interceptors.response.use(
   (error: AxiosError) => {
     const status = error.response?.status
     if (status === 401) {
-      message.error(i18n.t('request.sessionExpired'))
+      message.error(i18n.t('common:request.sessionExpired'))
       removeToken()
       const base = (import.meta.env.VITE_APP_CONTEXT_PATH || '/').replace(/\/?$/, '/')
       setTimeout(() => {
         window.location.href = `${base}login`
       }, 1000)
     } else if (status) {
-      message.error(i18n.t('request.error', { status }))
+      message.error(i18n.t('common:request.error', { status }))
     } else {
-      message.error(i18n.t('request.networkError'))
+      message.error(i18n.t('common:request.networkError'))
     }
     return Promise.reject(error)
   }
