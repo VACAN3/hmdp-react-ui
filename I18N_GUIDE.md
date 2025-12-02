@@ -12,7 +12,7 @@
 *   **资源加载**: `i18next-http-backend`
     *   *特点*: 语言包作为静态资源（JSON）存放在 `public/locales` 目录，按需异步请求，减少主包体积。
     *   *懒加载*: 默认只加载 `common` 命名空间，其他业务模块（如 `downloadCenter`）仅在进入对应页面时才加载。
-*   **语言检测**: `i18next-browser-languagedetector`
+*   **当前语言检测**: `i18next-browser-languagedetector`
     *   *策略*: 查询参数 (`?lang=`) > 本地存储 (`localStorage`) > 浏览器默认语言。
 *   **自动化工具**: `i18next-parser`
     *   *功能*: 自动扫描代码中的 `t()` 调用，根据命名空间生成或更新 JSON 语言文件，彻底告别手动维护 Key 的繁琐。

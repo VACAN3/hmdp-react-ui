@@ -9,6 +9,7 @@ import type { TenantVO } from '@/api/types'
 import './Login.css'
 import bg2 from '@/assets/login/bg2.jpg'
 import { EyeOutlined, EyeInvisibleOutlined, UserOutlined } from '@ant-design/icons'
+import { useQuery } from '@tanstack/react-query'
 
 type LoginFormValues = {
   username: string
@@ -20,51 +21,54 @@ type LoginFormValues = {
 }
 
 export default function Login() {
-  const { t } = useTranslation()
+  const { t } = useTranslation('common')
   const [form] = Form.useForm<LoginFormValues>()
   const navigate = useNavigate()
   const location = useLocation() as any
 
   const clientId = (import.meta.env.VITE_APP_CLIENT_ID || 'hmdp-ui') as string
-  const [captchaEnabled, setCaptchaEnabled] = useState<boolean>(true)
-  const [tenantEnabled, setTenantEnabled] = useState<boolean>(false)
-  const [codeUrl, setCodeUrl] = useState<string>('')
-  const [tenantList, setTenantList] = useState<TenantVO[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [isUser, setIsUser] = useState<boolean>(true)
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false)
 
-  const fetchCode = async () => {
-    try {
-      const data = await getCodeImg()
-      const enabled = data?.captchaEnabled === undefined ? true : data?.captchaEnabled
-      setCaptchaEnabled(enabled)
-      if (enabled) {
-        setCodeUrl(`data:image/gif;base64,${data?.img ?? ''}`)
-        form.setFieldsValue({ uuid: data?.uuid })
-      }
-    } catch {
-      // 验证码获取失败时关闭验证码
-      setCaptchaEnabled(false)
-    }
-  }
+  // 1. 获取验证码
+  const { data: codeData, refetch: refetchCode } = useQuery({
+    queryKey: ['login', 'captcha'],
+    queryFn: getCodeImg,
+    refetchOnWindowFocus: false,
+    retry: false,
+    gcTime: 0, // 不缓存验证码，每次卸载重进都拉新的
+  })
 
-  const fetchTenantList = async () => {
-    try {
-      const data = await getTenantList()
-      const enabled = (data as any)?.tenantEnabled === undefined ? true : (data as any)?.tenantEnabled
-      setTenantEnabled(enabled)
-      if (enabled) {
-        const list = (data as any)?.voList ?? []
-        setTenantList(list)
-        if (list.length > 0) {
-          form.setFieldsValue({ tenantId: list[0].tenantId })
-        }
-      }
-    } catch {
-      setTenantEnabled(false)
+  // 2. 获取租户列表
+  const { data: tenantData } = useQuery({
+    queryKey: ['login', 'tenants'],
+    queryFn: getTenantList,
+    staleTime: 1000 * 60 * 5, // 5分钟缓存
+    retry: false,
+  })
+
+  // 衍生状态
+  const captchaEnabled = codeData?.captchaEnabled === undefined ? true : codeData?.captchaEnabled
+  const codeUrl = captchaEnabled && codeData?.img ? `data:image/gif;base64,${codeData.img}` : ''
+  
+  const tenantEnabled = tenantData?.tenantEnabled === undefined ? true : tenantData?.tenantEnabled
+  const tenantList = tenantEnabled ? (tenantData?.voList ?? []) : []
+
+  // 副作用：同步验证码 UUID 到表单
+  useEffect(() => {
+    if (captchaEnabled && codeData?.uuid) {
+      form.setFieldsValue({ uuid: codeData.uuid })
     }
-  }
+  }, [codeData, captchaEnabled, form])
+
+  // 副作用：同步默认租户到表单
+  useEffect(() => {
+    if (tenantList.length > 0 && !form.getFieldValue('tenantId')) {
+      // 只有当表单没值时才设置默认值，避免覆盖用户手动选择
+      form.setFieldsValue({ tenantId: tenantList[0].tenantId })
+    }
+  }, [tenantList, form])
 
   const restoreForm = () => {
     const tenantId = localStorage.getItem('tenantId')
@@ -80,11 +84,10 @@ export default function Login() {
   }
 
   useEffect(() => {
-    // 清理旧 token，初始化验证码与租户数据并恢复本地记忆
+    // 清理旧 token
     localStorage.removeItem('oldAdminToken')
     localStorage.removeItem('User-Token')
-    fetchCode()
-    fetchTenantList()
+    // 恢复表单记忆
     restoreForm()
   }, [])
 
@@ -130,7 +133,7 @@ export default function Login() {
       console.log("🚀 ~ onFinish ~ e:", e)
       setLoading(false)
       // 登录失败时刷新验证码
-      fetchCode()
+      refetchCode()
     }
   }
 
@@ -232,7 +235,7 @@ export default function Login() {
                             <Col>
                               {codeUrl && (
                                 <div className="login-code">
-                                  <Image src={codeUrl} alt={t('login.captcha')} preview={false} height={40} onClick={fetchCode} className="login-code-img" />
+                                  <Image src={codeUrl} alt={t('login.captcha')} preview={false} height={40} onClick={() => refetchCode()} className="login-code-img" />
                                 </div>
                               )}
                             </Col>

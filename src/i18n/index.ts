@@ -11,8 +11,12 @@ i18n
     fallbackLng: 'zh-CN',
     debug: import.meta.env.DEV,
     
-    // 命名空间配置
-    // 注意：只有 'common' 会被预加载。其他命名空间（如 downloadCenter, profile）将在组件中通过 useTranslation(['ns']) 懒加载
+    /**
+     * 命名空间配置
+     * 注意：
+     *   只有 'common' 会被预加载
+     *   其他命名空间（如 downloadCenter, profile）将在组件中通过 useTranslation(['ns']) 懒加载
+     */
     ns: ['common'],
     defaultNS: 'common',
 

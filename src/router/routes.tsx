@@ -135,7 +135,7 @@ function getOrder(key: string, rs: AppRouteObject[]): number {
 // 生成用于 useRoutes 的 RouteObject[]（与 React Router v6 兼容）
 export function toReactRoutes(rs: AppRouteObject[]): RouteObject[] {
   const walk = (list: AppRouteObject[]): RouteObject[] =>
-    list.map(r => {
+    list.map((r: any) => {
       const wrappedElement = r.meta?.auth
         ? (
           <RequireAuth roles={r.meta?.roles} permissions={r.meta?.permissions}>
